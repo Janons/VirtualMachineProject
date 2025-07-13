@@ -1,6 +1,8 @@
-#include <cstdint>
+
 #ifndef enums_H
 #define enums_H
+
+#include <stdint.h>
 
 // enums
 enum
@@ -44,8 +46,5 @@ enum
     FL_ZRO = 1 << 1, /* Z */
     FL_NEG = 1 << 2, /* N */
 };
-
-// enum function
-void update_flags(uint16_t r);
 
 #endif

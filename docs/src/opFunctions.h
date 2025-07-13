@@ -6,7 +6,7 @@
 // all the functions to be used for the opcodes
 
 /*The ADD instruction takes two numbers, adds them together, and stores the result in a register*/
-void ADD(uint16_t *reg, uint16_t instr);
+uint16_t ADD(uint16_t *reg, uint16_t instr);
 
 /**/
 void LDI();

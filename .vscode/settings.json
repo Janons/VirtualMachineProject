@@ -2,6 +2,10 @@
     "files.associations": {
         "lc3-vm": "c",
         "conio.h": "c",
-        "cstdint": "c"
+        "cstdint": "c",
+        "enums.h": "c",
+        "windows.h": "c",
+        "stdlib.h": "c",
+        "signal.h": "c"
     }
 }
