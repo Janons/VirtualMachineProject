@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "lc3-vm": "c",
-        "conio.h": "c"
+        "conio.h": "c",
+        "cstdint": "c"
     }
 }
