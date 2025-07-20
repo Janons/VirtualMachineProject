@@ -17,6 +17,7 @@ uint16_t memory[MEMORY_MAX]; /*this the array that acts as our ->*/
 /*Register storage*/
 uint16_t reg[R_COUNT];
 
+
 void update_flags(uint16_t r)
 {
 
