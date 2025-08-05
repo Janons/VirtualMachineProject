@@ -3,7 +3,7 @@
 #include "trapFunctions.h"
 #include "enums.h"
 
-void PUTS(uint16_t memory, uint16_t *reg)
+void PUTS(uint16_t *memory, uint16_t *reg)
 {
     uint16_t *c = memory + reg[R_R0];
     while (*c)
@@ -15,6 +15,7 @@ void PUTS(uint16_t memory, uint16_t *reg)
     fflush(stdout);
 }
 
+/*writing to the external console*/
 void OUT(uint16_t *reg)
 {
     uint16_t *c = reg[R_R0];
@@ -28,7 +29,7 @@ void OUT(uint16_t *reg)
     fflush(c);
 }
 
-void PUTSP(uint16_t memory, uint16_t *reg)
+void PUTSP(uint16_t *memory, uint16_t *reg)
 {
     uint16_t *c = memory + reg[R_R0];
     while (*c)
@@ -43,10 +44,13 @@ void PUTSP(uint16_t memory, uint16_t *reg)
     fflush(stdout);
 }
 
+/*put inside the memory the characters*/
 uint16_t IN(uint16_t *reg)
 {
     printf("Enter a character");
     char c = getchar();
+
+    /*for auto echoing purposes*/
     putc(c, stdout);
     fflush(stdout);
 

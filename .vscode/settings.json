@@ -6,6 +6,9 @@
         "enums.h": "c",
         "windows.h": "c",
         "stdlib.h": "c",
-        "signal.h": "c"
+        "signal.h": "c",
+        "opfunctions.h": "c",
+        "trapfunctions.h": "c",
+        "stdint.h": "c"
     }
 }

@@ -13,7 +13,7 @@ uint16_t ADD(uint16_t *reg, uint16_t instr, uint16_t imm5)
 
     if (imm_flag)
     {
-        uint16_t imm5 = sign_extend(instr & 0x1F, 5);
+
         reg[r0] = reg[r1] + imm5;
     }
     else

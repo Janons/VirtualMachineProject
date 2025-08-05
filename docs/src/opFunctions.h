@@ -1,8 +1,7 @@
 
+#include <stdint.h>
 #ifndef OPFUNCTIONS_H
 #define OPFUNCTIONS_H
-
-#include <cstdint>
 
 // all the functions to be used for the opcodes
 

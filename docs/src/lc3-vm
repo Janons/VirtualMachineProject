@@ -1,14 +1,13 @@
-
-
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <Windows.h>
 #include <conio.h>
-
 // my libs
 #include "enums.h"
+#include "opFunctions.h"
+// #include "trapFunctions.h"
 
 /*Memory and Registers*/
 #define MEMORY_MAX (1 << 16)
@@ -42,6 +41,20 @@ uint16_t check_key()
     return WaitForSingleObject(hStdin, 1000) == WAIT_OBJECT_0 && _kbhit();
 }
 
+/*handle interrupts*/
+void handle_interrupt(int signal)
+{
+    restore_input_buffering();
+    printf("\n");
+    exit(-2);
+}
+
+// swapping functions
+uint16_t swap16(uint16_t x)
+{
+    return (x << 8) | (x >> 8);
+}
+
 void update_flags(uint16_t r)
 {
 
@@ -59,12 +72,6 @@ void update_flags(uint16_t r)
     {
         reg[R_COND] = FL_POS;
     }
-}
-
-// swapping functions
-uint16_t swap16(uint16_t x)
-{
-    return (x << 8) | (x >> 8);
 }
 
 // read image
@@ -127,29 +134,6 @@ uint16_t mem_read(uint16_t address)
     return memory[address];
 }
 
-// explain this code again to yourself
-uint16_t sign_extend(uint16_t x, int bit_count)
-{
-
-    if ((x >> (bit_count - 1)) & 1)
-    {
-
-        x |= (0xFFFF << bit_count);
-    }
-
-    return x;
-}
-
-/*windows specific codes*/
-
-HANDLE hStdin = INVALID_HANDLE_VALUE;
-DWORD fdwOldMode; // Store the original console mode
-
-void restore_input_buffering()
-{
-    SetConsoleMode(hStdin, fdwOldMode);
-}
-
 uint16_t check_key()
 {
     if (hStdin == NULL)
@@ -158,12 +142,26 @@ uint16_t check_key()
     }
     return WaitForSingleObject(hStdin, 1000) == WAIT_OBJECT_0 && _kbhit();
 }
+
 int main(int argc, const char *argv[])
 {
-    // Save the current console mode at program start
-    hStdin = GetStdHandle(STD_INPUT_HANDLE);
-    GetConsoleMode(hStdin, &fdwOldMode);
+    if (argc < 2)
+    {
+        printf("Welp I don't know what to say");
+        exit(2);
+    }
 
+    for (int j = 1; j < argc; j++)
+    {
+        if (!read_image(argv))
+        {
+            printf("failed to load image : %s\n", argv[j]);
+        }
+    }
+
+    /*set up for the virtual env*/
+    signal(SIGINT, handle_interrupt);
+    disable_input_buffering();
     /* since exactly one condition flag should be set at any given time, set the Z flag */
     reg[R_COND] = FL_ZRO;
 
@@ -181,35 +179,81 @@ int main(int argc, const char *argv[])
         /* FETCH */
         uint16_t instr = mem_read(reg[R_PC]++);
         uint16_t op = instr >> 12;
+        uint16_t imm;
 
+        /*op's*/
         switch (op)
         {
         case OP_ADD:
-            break;
+        {
+            uint16_t r0 = ADD(reg, instr, sign_extend(instr & 0x1F, 5));
+            update_flags(r0);
+        }
+        break;
+
         case OP_AND:
-            break;
+        {
+            uint16_t r0 = AND(reg, instr, sign_extend(instr & 0x1F, 5));
+            update_flags(r0);
+        }
+        break;
+
         case OP_NOT:
-            break;
+        {
+            uint16_t r0 = NOT(reg, instr);
+            update_flags(r0);
+        }
+        break;
+
         case OP_BR:
-            break;
+        {
+            BR(reg, instr, sign_extend(instr & 0x1FF, 9));
+        }
+        break;
+
         case OP_JMP:
-            break;
+        {
+            JMP(reg, instr);
+        }
+        break;
+
         case OP_JSR:
-            break;
+        {
+            JSR_R(reg, instr, sign_extend(instr & 0x3FF, 11));
+        }
+        break;
+
         case OP_LD:
-            break;
+        {
+            uint16_t r0 = LD(reg, instr, sign_extend(instr & 0x1FF, 9));
+            update_flags(r0);
+        }
+        break;
+
         case OP_LDI:
+            // TODO: Call LDI(reg, instr, ...) and update_flags
             break;
+
         case OP_LDR:
+            // TODO: Call LDR(reg, instr, ...) and update_flags
             break;
+
         case OP_LEA:
+            // TODO: Call LEA(reg, instr, ...) and update_flags
             break;
+
         case OP_ST:
+            // TODO: Call ST(reg, instr, ...)
             break;
+
         case OP_STI:
+            // TODO: Call STI(reg, instr, ...)
             break;
+
         case OP_STR:
+            // TODO: Call STR(reg, instr, ...)
             break;
+
         case OP_TRAP:
             reg[R_R7] = reg[R_PC];
 
@@ -236,4 +280,6 @@ int main(int argc, const char *argv[])
             break;
         }
     }
+
+    restore_input_buffering();
 }
