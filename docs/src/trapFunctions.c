@@ -1,6 +1,5 @@
 
-#include <stdio.h>
-#include "trapFunctions.h"
+#include "trapFunctions.h" // CORRECT - should use quotes for local headers
 #include "enums.h"
 
 void PUTS(uint16_t *memory, uint16_t *reg)
@@ -18,15 +17,9 @@ void PUTS(uint16_t *memory, uint16_t *reg)
 /*writing to the external console*/
 void OUT(uint16_t *reg)
 {
-    uint16_t *c = reg[R_R0];
-
-    while (*c)
-    {
-        putc((char)*c, stdout);
-        ++c;
-    }
-
-    fflush(c);
+    uint16_t c = reg[R_R0]; // Not a pointer!
+    putc((char)c, stdout);
+    fflush(stdout); // Use stdout, not c
 }
 
 void PUTSP(uint16_t *memory, uint16_t *reg)

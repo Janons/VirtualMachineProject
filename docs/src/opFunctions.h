@@ -1,7 +1,10 @@
 
-#include <stdint.h>
 #ifndef OPFUNCTIONS_H
 #define OPFUNCTIONS_H
+
+#include <stdio.h>
+#include <stdint.h>
+#include "enums.h"
 
 // all the functions to be used for the opcodes
 

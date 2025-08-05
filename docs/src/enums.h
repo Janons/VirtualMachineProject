@@ -1,9 +1,6 @@
 #ifndef enums_H
 #define enums_H
 
-#include <stdint.h>
-
-
 // Mmeory mapped registers
 enum
 {

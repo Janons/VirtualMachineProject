@@ -1,13 +1,16 @@
+#include "trapFunctions.h"
+
 #include <stdint.h>
 #include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
-#include <Windows.h>
+
+#include <windows.h>
 #include <conio.h>
+
 // my libs
 #include "enums.h"
 #include "opFunctions.h"
-// #include "trapFunctions.h"
 
 /*Memory and Registers*/
 #define MEMORY_MAX (1 << 16)
@@ -41,6 +44,14 @@ uint16_t check_key()
     return WaitForSingleObject(hStdin, 1000) == WAIT_OBJECT_0 && _kbhit();
 }
 
+uint16_t sign_extend(uint16_t x, int bit_count)
+{
+    if ((x >> (bit_count - 1)) & 1)
+    {
+        x |= (0xFFFF << bit_count);
+    }
+    return x;
+}
 /*handle interrupts*/
 void handle_interrupt(int signal)
 {
@@ -132,15 +143,6 @@ uint16_t mem_read(uint16_t address)
     }
 
     return memory[address];
-}
-
-uint16_t check_key()
-{
-    if (hStdin == NULL)
-    {
-        hStdin = GetStdHandle(STD_INPUT_HANDLE);
-    }
-    return WaitForSingleObject(hStdin, 1000) == WAIT_OBJECT_0 && _kbhit();
 }
 
 int main(int argc, const char *argv[])

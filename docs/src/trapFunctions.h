@@ -1,8 +1,11 @@
 
-#include <stdint.h>
 
 #ifndef TRAPFUNCTIONS_H
 #define TRAPFUNCTIONS_H
+
+#include <stdio.h>
+#include <stdint.h>
+#include "enums.h"
 
 void PUTS(uint16_t *memory, uint16_t *reg);
 void OUT(uint16_t *reg);

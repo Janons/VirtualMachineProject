@@ -1,4 +1,4 @@
-#include <opFunctions.h>
+#include "opFunctions.h"
 #include "enums.h"
 
 uint16_t ADD(uint16_t *reg, uint16_t instr, uint16_t imm5)
