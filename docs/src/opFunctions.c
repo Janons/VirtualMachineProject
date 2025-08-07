@@ -108,6 +108,24 @@ void JSR_R(uint16_t *reg, uint16_t instr, uint16_t imm10)
 
 uint16_t LD(uint16_t *reg, uint16_t instr, uint16_t imm8)
 {
-    // calculating DR
+    // calculating Destination register
     uint16_t r0 = (instr >> 9) & 0x7;
+
+    /*offset*/
+    uint16_t pc_offset = imm8;
+
+    /*loading everything into the memory*/
+}
+
+uint16_t LDi(uint16_t *reg, uint16_t instr, uint16_t imm9)
+{
+    /*destination register*/
+    uint16_t r0 = (instr >> 9) & 0x7;
+
+    /*PCoffset 9*/
+    uint16_t pc_offset = imm9;
+
+    reg[r0] = mem_read(mem_read(reg[R_PC] + pc_offset));
+
+    return r0;
 }

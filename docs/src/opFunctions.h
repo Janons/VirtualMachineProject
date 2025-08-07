@@ -12,7 +12,7 @@
 uint16_t ADD(uint16_t *reg, uint16_t instr, uint16_t imm5);
 
 /**/
-void LDI();
+uint16_t LDi(uint16_t *reg, uint16_t instr, uint16_t imm9);
 /*Bitwise And*/
 uint16_t AND(uint16_t *reg, uint16_t instr, uint16_t imm5);
 /*Bitwise Not*/
